@@ -40,13 +40,23 @@ var Mapper = Object.extend({
 			  center: moscowCenter
 			},
 			{ name: "СПБ 2008",
-			  style: "default#darkblueSmallPoint",
+			  style: "default#pinkSmallPoint",
 			  fileName: "spb2008-all.json",
 			  center: spbCenter
 			},
-			{ name: "Киев 2010",
+			{ name: "СПБ 2010",
 			  style: "default#darkblueSmallPoint",
+			  fileName: "spb2010-all.json",
+			  center: spbCenter
+			},
+			{ name: "Киев 2010",
+			  style: "default#pinkSmallPoint",
 			  fileName: "kiev2010-all.json",
+			  center: kievCenter
+			},
+			{ name: "Киев 2011",
+			  style: "default#darkblueSmallPoint",
+			  fileName: "kiev2011-all.json",
 			  center: kievCenter
 			}
 		].forEach((function(data) {
