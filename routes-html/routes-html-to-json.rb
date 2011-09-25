@@ -14,18 +14,19 @@ html_file = ARGV[0]
 class KP
   def initialize(html_dt)
     @name = html_dt.innerText.strip
+    @name.gsub!(/\s+Историческая справка$/i, '')
 
     html_elem = html_dt
     loop do
       html_elem = html_elem.next_sibling
       break if html_elem.nil? || html_elem.name.downcase == "dt"
-      # puts html_elem
+
       case html_elem['class']
       when 'description'
         @description = html_elem.innerText.strip
       when 'quest'
         @quest = html_elem.innerText.strip
-        @quest.gsub!(/\s+(Отгадка|Ответ)$/, '')
+        @quest.gsub!(/\s+(Отгадка|Ответ)$/i, '')
       when 'geo'
         lat = (html_elem/"[@class=latitude]")
         lon = (html_elem/"[@class=longitude]")
@@ -36,12 +37,13 @@ class KP
         @answer = html_elem.innerText.strip
       when 'longanswer'
         @longanswer = html_elem.innerText.strip
-        @longanswer.gsub!(/^Отгадка\s+/, '')
+        @longanswer.gsub!(/^(Отгадка|Ответ)\s+/i, '')
       when 'image'
         @image = (html_elem/"a")[0]['href'].strip
         raise "Unable to parse 'image' for #{html_elem.to_s}" if @image.nil? or @image.empty?
       when 'history'
         @history = html_elem.innerText.strip
+        @history.gsub!(/^Историческая справка\s+/i, '')
       end
     end
   end
@@ -64,7 +66,6 @@ class KP
     (doc/"dl[@class=route]//dt").each do |dt|
       kp = KP.new(dt)
       result << kp.to_json
-      # puts JSON.generate(kp.to_json, opts)
     end
     return result
   end
