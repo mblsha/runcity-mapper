@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>КП Бегущего Города</title>
+	<title>runcity-mapper</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<script src="http://api-maps.yandex.ru/1.1/index.xml?key=APrcfU4BAAAAIE81NwIAFNc5wuaVRJPy2EwTzTX4HmFFzJwAAAAAAAAAAAA8zpl_YegpwBmHhIc3QYCca0-NEA==" type="text/javascript"></script>
 
@@ -23,15 +23,46 @@
 	</script>
 
 	<style type="text/css" media="screen">
-		html, body, #YMapsID {
+		html, body {
 			width:  100%;
 			height: 100%;
 			padding: 0;
 			margin: 0;
 		}
-	</style>
+
+		#YMapsID {
+			width:  100%;
+			height: 90%;
+		}
+
+		#ControlPanel {
+			height: 10%;
+		}
+
+		/* http://www.c82.net/samples/checklist-basic.html */
+		/* Undo some styles from the master stylesheet */
+		.checklist li { background: none; padding-left: 0; }
+
+		/* CSS for checklists */
+		.checklist {
+			border: 1px solid #ccc;
+			list-style: none;
+			height: 100%; /* 10em */
+			overflow: auto;
+			width: 20em;
+		}
+		.checklist, .checklist li { margin: 0; padding: 0; }
+		.checklist label { display: block; padding: 0 0.2em 0 25px; text-indent: -25px; }
+		.checklist label:hover, .checklist label.hover { background: #777; color: #fff; }
+		* html .checklist label { height: 1%; }	</style>
 </head>
 <body>
 	<div id="YMapsID"></div>
+	<div id="ControlPanel">
+		<form>
+			<ul id="MapListForm" class="checklist">
+			</ul>
+		</form>
+	</div>
 </body>
 </html>
