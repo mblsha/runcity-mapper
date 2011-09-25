@@ -951,6 +951,12 @@ module JSON
           def to_json(*) to_s.to_json end
         end
 
+        module Symbol
+          def <=>(other)
+            to_s <=> other.to_s
+          end
+        end
+
         module Hash
           # Returns a JSON string containing a JSON object, that is unparsed from
           # this Hash instance.
