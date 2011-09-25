@@ -2,7 +2,7 @@
 
 require 'rubygems'
 require 'hpricot'
-require 'json'
+require File.dirname(__FILE__) + '/helpers'
 
 if ARGV.length != 1
   puts "USAGE: routes-html-to-json.rb input-file.html"
@@ -78,5 +78,4 @@ class KP
 end
 
 kp_list = KP.process_html(open(html_file))
-opts = {:indent => "  ", :space => "", :object_nl => "\n", :array_nl => "\n"}
-puts JSON.generate(kp_list, opts)
+puts generate_json(kp_list)

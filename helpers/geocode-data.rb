@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby -wKU
 
 require 'rubygems'
-require 'json'
 require 'net/http'
 require 'net/https'
 require 'uri'
 require 'pp'
 require 'win32console' if RUBY_PLATFORM =~ /mingw32/
 require 'colored'
+require File.dirname(__FILE__) + '/helpers'
 
 if ARGV.length != 2
   puts "USAGE: geocode-data.rb CITY_NAME input-file.json"
@@ -71,9 +71,9 @@ end
 
 data.each do |kp|
   next if kp['lat'] and kp['lon']
-  puts kp['name']
   if kp['name'] =~ /Загадка/i
     if kp['address'].nil?
+      puts "'address' field is not provided:".red
       pp kp
     else
       start_geocoder_request(kp, kp['address'])
@@ -90,5 +90,4 @@ def dump_data(file_name, data)
   puts "Written #{file_name}"
 end
 
-opts = {:indent => "  ", :space => "", :object_nl => "\n", :array_nl => "\n"}
-dump_data($json_file, JSON.generate(data, opts))
+dump_data($json_file, generate_json(data))
