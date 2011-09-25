@@ -39,9 +39,45 @@ var Mapper = Object.extend({
 			  fileName: "msk2011-all.json",
 			  center: moscowCenter
 			},
+
+			{ name: "СПБ 2000",
+			  style: "default#nightSmallPoint",
+			  fileName: "spb2000-all.json",
+			  center: spbCenter
+			},
+			{ name: "СПБ 2001",
+			  style: "default#whiteSmallPoint",
+			  fileName: "spb2001-all.json",
+			  center: spbCenter
+			},
+			{ name: "СПБ 2002",
+			  style: "default#greenSmallPoint",
+			  fileName: "spb2002-all.json",
+			  center: spbCenter
+			},
+			{ name: "СПБ 2003",
+			  style: "default#redSmallPoint",
+			  fileName: "spb2003-all.json",
+			  center: spbCenter
+			},
+			{ name: "СПБ 2004",
+			  style: "default#yellowSmallPoint",
+			  fileName: "spb2004-all.json",
+			  center: spbCenter
+			},
+			{ name: "СПБ 2007",
+			  style: "default#greySmallPoint",
+			  fileName: "spb2007-all.json",
+			  center: spbCenter
+			},
 			{ name: "СПБ 2008",
-			  style: "default#pinkSmallPoint",
+			  style: "default#orangeSmallPoint",
 			  fileName: "spb2008-all.json",
+			  center: spbCenter
+			},
+			{ name: "СПБ 2009",
+			  style: "default#pinkSmallPoint",
+			  fileName: "spb2009-all.json",
 			  center: spbCenter
 			},
 			{ name: "СПБ 2010",
@@ -49,6 +85,7 @@ var Mapper = Object.extend({
 			  fileName: "spb2010-all.json",
 			  center: spbCenter
 			},
+
 			{ name: "Киев 2010",
 			  style: "default#pinkSmallPoint",
 			  fileName: "kiev2010-all.json",
