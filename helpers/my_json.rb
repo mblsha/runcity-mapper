@@ -978,7 +978,8 @@ module JSON
             depth = state.depth += 1
             first = true
             indent = !state.object_nl.empty?
-            each { |key,value|
+            keys.sort.each { |key|
+              value = self[key]
               result << delim unless first
               result << state.indent * depth if indent
               result << key.to_s.to_json(state)
