@@ -15,6 +15,12 @@ class KP
   def initialize(html_dt)
     @name = html_dt.innerText.strip
     @name.gsub!(/\s+Историческая справка$/i, '')
+    if @name =~ /^(\d+)\s+/
+      @id = $1
+      @name.gsub!(/^(\d+)\s+/, '')
+    else
+      raise "Unable to parse 'id' for #{html_dt.to_s}"
+    end
 
     html_elem = html_dt
     loop do
@@ -50,7 +56,7 @@ class KP
 
   def to_json
     result = {}
-    fields = [:name, :description, :quest, :lat, :lon, :answer, :longanswer, :image, :history]
+    fields = [:id, :name, :description, :quest, :lat, :lon, :answer, :longanswer, :image, :history]
     fields.each do |f|
       next if not instance_variable_defined?("@#{f}")
       var = instance_variable_get("@#{f}")

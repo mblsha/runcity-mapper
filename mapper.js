@@ -12,41 +12,52 @@ var Mapper = Object.extend({
 		this.data = {};
 
 		[
-			'msk2010-all.json',
-			'msk2011-all.json'
-		].forEach((function(fileName) {
-			this.loadData(fileName);
+			{ name: "Москва 2010",
+			  style: "default#pinkPoint",
+			  fileName: "msk2010-all.json"
+			},
+			{ name: "Москва 2011",
+			  style: "default#darkbluePoint",
+			  fileName: "msk2011-all.json"
+			}
+		].forEach((function(data) {
+			this.loadData(data);
 		}).bind(this));
 	},
 
-	processData: function(fileName) {
-		addKp = (function(kp) {
+	processData: function(name) {
+		addKp = (function(name, kp) {
 			if (!kp.lat || !kp.lon)
 				return;
 
-			kp.placemark = new YMaps.Placemark(new YMaps.GeoPoint(kp.lon, kp.lat));
-			kp.placemark.name = kp.name;
+			kp.placemark = new YMaps.Placemark(
+				new YMaps.GeoPoint(kp.lon, kp.lat),
+				{ style: this.data[name].style }
+			);
+			kp.placemark.setIconContent(kp.id);
+			kp.placemark.name = kp.name + " (" + name + ")";
 			kp.placemark.description = kp.description;
 			this.map.addOverlay(kp.placemark);
-		}).bind(this);
+		}).bind(this, name);
 
-		var d = this.data[fileName];
+		var d = this.data[name];
 
-		for (var i in d) {
-			addKp(d[i]);
+		for (var i in d.kpList) {
+			addKp(d.kpList[i]);
 		}
 	},
 
-	loadData: function(fileName) {
+	loadData: function(data) {
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "data/" + fileName, true);
-		xhr.onreadystatechange = (function(fileName) {
+		xhr.open("GET", "data/" + data.fileName, true);
+		xhr.onreadystatechange = (function(data) {
 			if ((xhr.readyState != 4) || (xhr.status != 200))
 				return;
 
-			this.data[fileName] = JSON.parse(xhr.responseText);
-			this.processData(fileName);
-		}).bind(this, fileName)
+			this.data[data.name] = data;
+			this.data[data.name].kpList = JSON.parse(xhr.responseText);
+			this.processData(data.name);
+		}).bind(this, data)
 		xhr.send();
 	}
 });
