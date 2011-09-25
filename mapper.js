@@ -17,6 +17,7 @@ var Mapper = Object.extend({
 		var spbCenter = new YMaps.GeoPoint(30.313622, 59.93772);
 		var kievCenter = new YMaps.GeoPoint(30.522301, 50.451118);
 
+		// http://api.yandex.ru/maps/jsapi/doc/ref/reference/styles.xml
 		[
 			{ name: "Москва 2007",
 			  style: "default#nightSmallPoint",

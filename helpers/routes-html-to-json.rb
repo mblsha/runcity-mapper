@@ -38,7 +38,7 @@ class KP
         lon = (html_elem/"[@class=longitude]")
         @lat = lat[0].innerText.strip if not lat.empty?
         @lon = lon[0].innerText.strip if not lon.empty?
-        raise "Unable to parse 'geo' for #{html_elem.to_s}" if @lat.nil? or @lon.nil?
+        raise "Unable to parse 'geo' for #{html_elem.to_s}" if @lat.empty? or @lon.empty?
       when 'answer'
         @answer = html_elem.innerText.strip
       when 'longanswer'
