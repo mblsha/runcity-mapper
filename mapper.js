@@ -1,117 +1,52 @@
-window.onload = function () {
-	var map = new YMaps.Map(document.getElementById("YMapsID"));
-	map.setCenter(new YMaps.GeoPoint(37.64, 55.76), 10);
+var Mapper = Object.extend({
+	constructor: function() {
+		this.map = new YMaps.Map(document.getElementById("YMapsID"));
+		this.map.setCenter(new YMaps.GeoPoint(37.64, 55.76), 10);
 
-	map.addControl(new YMaps.TypeControl());
-	map.addControl(new YMaps.ToolBar());
-	map.addControl(new YMaps.Zoom());
-	map.addControl(new YMaps.MiniMap());
-	map.addControl(new YMaps.ScaleLine());
+		this.map.addControl(new YMaps.TypeControl());
+		this.map.addControl(new YMaps.ToolBar());
+		this.map.addControl(new YMaps.Zoom());
+		this.map.addControl(new YMaps.MiniMap());
+		this.map.addControl(new YMaps.ScaleLine());
 
-	data = [
-{
-    "history":"Табличка с адресом Большая Алексеевская ул., д. 15 – единственное видимое напоминание об этом старом московском топониме. Она закреплена на стене церкви святого Мартина Исповедника, стоящей на углу улиц Станиславского и Солженицына. Столь редкое для Москвы посвящение церкви объясняется тем, что она была основана в честь дня венчания на престол великого князя Василия III, отца будущего первого русского царя Ивана Грозного. Его восшествие на престол состоялось в праздник св. Мартина, 14 (27) апреля 1502 года. Ныне существующий огромный храм в стиле классицизма выстроен в 1791-1806 годах по проекту архитектора Родиона Казакова. По преданию, в качестве образца для храма был выбран собор святого Апостола Павла в Лондоне, построенный знаменитым архитектором Кристофером Реном.",
-    "lat":"55.7433908",
-    "description":"Информационный стенд под адресной табличкой",
-    "lon":"37.65995",
-    "quest":"Сокращение из трёх букв",
-    "answer":"СВТ (МЧЧ, ПРП, ИСП)",
-    "name":"01 Б. Алексеевская ул., д. 15 Историческая справка"
-  },
-  {
-    "lat":"55.7299859",
-    "description":"Вход в подземный переход",
-    "lon":"37.6234531",
-    "quest":"Нижняя буква в надписи при входе",
-    "answer":"о",
-    "name":"02 Ул. Житная, д. 2/60"
-  },
-  {
-    "lat":"55.540315",
-    "description":"Рисунок на стене",
-    "lon":"37.574417",
-    "quest":"Число под надписью «ГВ» под мордой рыбы",
-    "answer":"4.3",
-    "name":"07 2-я Мелитопольская ул., д. 3, с. 1"
-  },
-  {
-    "lat":"55.7500063",
-    "description":"Клуб-кафе «Гарцующий Дредноут»",
-    "lon":"37.5929967",
-    "quest":"Организаторы игр-путеводителей из Минска. Подпись",
-    "name":"10 Ул. Арбат, д. 22"
-  },
-  {
-    "lat":"55.611444",
-    "description":"Южный вестибюль. Колонна с гербом",
-    "lon":"37.602902",
-    "quest":"Надпись на гербе",
-    "answer":"PRAHA MATKA MEST",
-    "name":"12 Станция м. Пражская"
-  },
-  {
-    "lat":"55.632269",
-    "description":"Родники на берегу реки Чертановка. (см. карту). Оформление родника Серебряные Ключи",
-    "lon":"37.555989",
-    "quest":"Как ставить вёдра на полку?",
-    "answer":"вверх дном",
-    "name":"14 Битцевский лес"
-  },
-  {
-    "lat":"55.622076",
-    "description":"Стена, на которой висит номер дома",
-    "lon":"37.537699",
-    "quest":"Число под номером дома ниже уровня подоконника",
-    "answer":"9,5",
-    "name":"16 Профсоюзная ул., д. 123А, с. 12"
-  },
-  {
-    "history":"Путь к пристани «Коломенское» идёт по улице Новинки, через северные ворота музея-заповедника «Коломенское», мимо музея деревянного зодчества. Формирование музея началось ещё в 1920-х годах по инициативе П. Д. Барановского. Первоначально собранные в Коломенском памятники стояли в центральной части музея, а сюда были перенесены в 2007 году. Первой вам встретится шатровая башня ворот Николо-Корельского монастыря (1692), в 1930-х перевезённая в Коломенское с берега Белого моря. Далее – огромная Моховая башня Сумского острога (1680-е), также перевезённая в Коломенское ещё в 1931, но собранная на новом месте только в 2007 году. За ней – небольшая башня Братского острога (1652), перевезённая в Москву из Сибири в 1950-х. Ближе к Москве-реке стоит водяная мельница, построенная по образцу старых построек. Советуем обратить внимание и на стоящую чуть поодаль деревянную Георгиевскую церковь (1685), в 2010 году вывезенную из глухой деревни в Архангельской области.",
-    "lat":"55.6754791",
-    "description":"Пристань Коломенское. После 22-00 КП размещается на автостоянке по чётной стороне ул. Новинки, напротив д. 31",
-    "lon":"37.6774406",
-    "quest":"Подпись судьи",
-    "name":"20 Музей-заповедник Коломенское Историческая справка"
-  },
-  {
-    "lat":"55.7073605",
-    "description":"Фирменный магазин «Garmin»",
-    "lon":"37.5907302",
-    "quest":"Подпись судьи",
-    "name":"30 Ул. Вавилова, д. 3, ТРЦ «Гагаринский»"
-  },
-  {
-    "lat":"55.610123",
-    "description":"Подъезд №1",
-    "lon":"37.72762",
-    "quest":"Надпись на козырьке подъезда",
-    "answer":"ЦЕНТР — ГОРОДА. ЛЮКС",
-    "name":"39 Воронежская ул., д. 7"
-  },
-  {
-    "lat":"55.6757272",
-    "description":"Спорткомплекс \"КАНТ\", магазин спорттоваров",
-    "lon":"37.6124668",
-    "quest":"Подпись судьи",
-    "name":"40 Электролитный пр-д, д. 7, к. 2"
-  }
-];
+		this.data = {};
 
-	function addKp(map, kp) {
-		if (!kp.lat || !kp.lon)
-			return;
+		[
+			'msk2010-all.json',
+			'msk2011-all.json'
+		].forEach((function(fileName) {
+			this.loadData(fileName);
+		}).bind(this));
+	},
 
-		kp.placemark = new YMaps.Placemark(new YMaps.GeoPoint(kp.lon, kp.lat));
-		kp.placemark.name = kp.name;
-		kp.placemark.description = kp.description;
-		map.addOverlay(kp.placemark);
+	processData: function(fileName) {
+		addKp = (function(kp) {
+			if (!kp.lat || !kp.lon)
+				return;
+
+			kp.placemark = new YMaps.Placemark(new YMaps.GeoPoint(kp.lon, kp.lat));
+			kp.placemark.name = kp.name;
+			kp.placemark.description = kp.description;
+			this.map.addOverlay(kp.placemark);
+		}).bind(this);
+
+		var d = this.data[fileName];
+
+		for (var i in d) {
+			addKp(d[i]);
+		}
+	},
+
+	loadData: function(fileName) {
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", "data/" + fileName, true);
+		xhr.onreadystatechange = (function(fileName) {
+			if ((xhr.readyState != 4) || (xhr.status != 200))
+				return;
+
+			this.data[fileName] = JSON.parse(xhr.responseText);
+			this.processData(fileName);
+		}).bind(this, fileName)
+		xhr.send();
 	}
-
-	for (var i in data) {
-		addKp(map, data[i]);
-	}
-	// Добавление меток на карту
-	// map.addOverlay(new YMaps.Placemark(new YMaps.GeoPoint(37.64, 55.76)));
-	// map.addOverlay(new YMaps.Placemark(new YMaps.GeoPoint(37.68, 55.73)));
-	// map.addOverlay(new YMaps.Placemark(new YMaps.GeoPoint(37.62, 55.73)));
-}
+});
