@@ -4,24 +4,37 @@ var MapLayer = Object.extend({
 		this.initData = data;
 		this.kpList = JSON.parse(kpDataText);
 
+		this.addToMapListForm(application.mapListForm);
+	},
+
+	addToMapListForm: function(mapListForm) {
 		var li = document.createElement('li');
 		var label = document.createElement('label');
-		label.textContent = data.name;
+		var checkbox = document.createElement('input');
+		var centerLink = document.createElement('a');
+
+		li.appendChild(label);
+		label.textContent = this.initData.name;
+		label.prependChild(checkbox);
+		label.appendChild(centerLink);
+		mapListForm.appendChild(li);
+
 		label.onmouseover = function() { this.className += " hover"; };
 		label.onmouseout = function() { this.className = this.className.replace(" hover", ""); };
 
-		var checkbox = document.createElement('input');
 		checkbox.setAttribute('type', 'checkbox');
-		checkbox.setAttribute('id',   data.fileName);
+		checkbox.setAttribute('id',   this.initData.fileName);
 
 		checkbox.onclick = (function(id) {
 			var checkbox = document.getElementById(id);
 			this.setVisible(checkbox.checked);
-		}).bind(this, data.fileName);
+		}).bind(this, this.initData.fileName);
 
-		li.appendChild(label);
-		label.prependChild(checkbox);
-		application.mapListForm.appendChild(li);
+		centerLink.setAttribute('href', '#');
+		centerLink.textContent = "(центрировать)";
+		centerLink.onclick = (function() {
+			this.centerMap();
+		}).bind(this);
 	},
 
 	setVisible: function(visible) {
@@ -52,6 +65,10 @@ var MapLayer = Object.extend({
 		kp.placemark.name = kp.name + " (" + this.initData.name + ")";
 		kp.placemark.description = kp.description;
 		return kp.placemark;
+	},
+
+	centerMap: function() {
+		application.map.setCenter(this.initData.center, 10);
 	}
 
 });

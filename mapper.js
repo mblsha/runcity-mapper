@@ -14,6 +14,8 @@ var Mapper = Object.extend({
 		this.data = {};
 
 		var moscowCenter = new YMaps.GeoPoint(37.64, 55.76);
+		var spbCenter = new YMaps.GeoPoint(30.313622, 59.93772);
+		var kievCenter = new YMaps.GeoPoint(30.522301, 50.451118);
 
 		[
 			{ name: "Москва 2007",
@@ -35,6 +37,16 @@ var Mapper = Object.extend({
 			  style: "default#darkblueSmallPoint",
 			  fileName: "msk2011-all.json",
 			  center: moscowCenter
+			},
+			{ name: "СПБ 2008",
+			  style: "default#darkblueSmallPoint",
+			  fileName: "spb2008-all.json",
+			  center: spbCenter
+			},
+			{ name: "Киев 2010",
+			  style: "default#darkblueSmallPoint",
+			  fileName: "kiev2010-all.json",
+			  center: kievCenter
 			}
 		].forEach((function(data) {
 			this.loadData(data);
