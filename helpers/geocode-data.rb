@@ -31,18 +31,25 @@ def parse_geocoder_response(kp, response)
       (not response['response']['GeoObjectCollection']['featureMember'][0]['GeoObject'].nil?) and
       (not response['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point'].nil?) and
       (not response['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point']['pos'].nil?))
+    kind = response['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['metaDataProperty']['GeocoderMetaData']['kind']
+    if kind == 'locality'
+      puts "Returned #{kind}".red
+      return
+    end
+
+    puts kind
     ll = response['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point']['pos']
     ll = ll.split(" ")
     kp['lat'] = ll[1]
     kp['lon'] = ll[0]
   else
     pp response
-    raise "Unable to parse response"
+    puts "Unable to parse response".red
   end
 end
 
 def start_geocoder_request(kp, address)
-  puts ">> #{kp['name']}".green
+  puts ">> #{$city_name}, #{address}".green
 
   url = URI.parse('http://geocode-maps.yandex.ru/1.x/')
   req = Net::HTTP::Post.new(url.path)

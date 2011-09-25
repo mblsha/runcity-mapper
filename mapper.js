@@ -20,7 +20,7 @@ var Mapper = Object.extend({
 		// http://api.yandex.ru/maps/jsapi/doc/ref/reference/styles.xml
 		[
 			{ name: "Москва 2007",
-			  style: "default#nightSmallPoint",
+			  style: "default#orangeSmallPoint",
 			  fileName: "msk2007-all.json",
 			  center: moscowCenter
 			},
