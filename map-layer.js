@@ -11,12 +11,26 @@ var MapLayer = Object.extend({
 
 	addToMapListForm: function(mapListForm) {
 		var result = this.application.createListCheckboxItem(this.initData.name);
-		this.city.listRoot.appendChild(result.li);
+		this.addLayerToCityList(this.initData.name, result.li);
 
 		this.checkbox = result.checkbox;
 		result.checkbox.onclick = (function() {
 			this.setVisible(this.checkbox.checked);
 		}).bind(this);
+	},
+
+	addLayerToCityList: function(name, li) {
+		var existingLi = this.city.listRoot.getElementsByTagName('li');
+		for (var i = 0; i < existingLi.length; ++i) {
+			var el = existingLi[i];
+			var existingName = el.getElementsByTagName('label')[0].innerText;
+			if (name < existingName) {
+				this.city.listRoot.insertBefore(li, el);
+				return;
+			}
+		}
+
+		this.city.listRoot.appendChild(li);
 	},
 
 	setVisible: function(visible) {

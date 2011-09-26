@@ -49,7 +49,7 @@ html, body {
 .checklist {
 	border: 1px solid #ccc;
 	list-style: none;
-	height: 15em;
+	height: 25em;
 	overflow: auto;
 	width: 100%;
 }
@@ -59,3 +59,10 @@ html, body {
 .checklist label a { display: none; }
 .checklist label:hover a { display: inline; padding-left: 0.5em; }
 * html .checklist label { height: 1%; }
+
+.checklist li li {
+	margin-left: 15px;
+}
+.checklist li a {
+	color: white;
+}
