@@ -5,6 +5,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<script src="http://api-maps.yandex.ru/1.1/index.xml?key=AD5nf04BAAAAGmoONAMA73eQgBViijUTFFoWmJc5kGwEXWwAAAAAAAAAAADYVmczPjOPNaTOc_WTbNc94ZL03Q==" type="text/javascript"></script>
 
+	<style type="text/css" media="screen">
+		@import url(style.css);
+	</style>
+
 	<script type="text/javascript" src="core/js/tools/duplo/core/object.js"></script>
 	<script type="text/javascript" src="core/js/tools/duplo/core/function.js"></script>
 	<script type="text/javascript" src="core/js/tools/duplo/core/array.js"></script>
@@ -20,44 +24,12 @@
 		window.addEventListener("load", function() {
 			var application = new Mapper();
 			window.application = application;
+
+			document.getElementById("ControlPanel").onmouseover = function() {
+				document.getElementById("ControlPanelArrow").setAttribute('style', 'display: none;');
+			};
 		}, false);
 	</script>
-
-	<style type="text/css" media="screen">
-		html, body {
-			width:  100%;
-			height: 100%;
-			padding: 0;
-			margin: 0;
-		}
-
-		#YMapsID {
-			width:  100%;
-			height: 90%;
-		}
-
-		#ControlPanel {
-			height: 10%;
-		}
-
-		/* http://www.c82.net/samples/checklist-basic.html */
-		/* Undo some styles from the master stylesheet */
-		.checklist li { background: none; padding-left: 0; }
-
-		/* CSS for checklists */
-		.checklist {
-			border: 1px solid #ccc;
-			list-style: none;
-			height: 7em;
-			overflow: auto;
-			width: 20em;
-		}
-		.checklist, .checklist li { margin: 0; padding: 0; }
-		.checklist label { display: block; padding: 0 0.2em 0 25px; text-indent: -25px; }
-		.checklist label:hover, .checklist label.hover { background: #777; color: #fff; }
-		.checklist label a { display: none; }
-		.checklist label:hover a { display: inline; padding-left: 0.5em; }
-		* html .checklist label { height: 1%; }	</style>
 </head>
 <body>
 	<div id="YMapsID"></div>
@@ -67,5 +39,6 @@
 			</ul>
 		</form>
 	</div>
+	<div id="ControlPanelArrow">←</div>
 </body>
 </html>
