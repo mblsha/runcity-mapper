@@ -62,7 +62,7 @@ var MapLayer = Object.extend({
 			{ style: this.initData.style }
 		);
 		// kp.placemark.setIconContent(kp.id);
-		kp.placemark.name = kp.name + " (" + this.initData.name + ")";
+		kp.placemark.name = kp.id + " " + kp.name + " (" + this.initData.name + ")";
 		kp.placemark.description = kp.description;
 		return kp.placemark;
 	},
