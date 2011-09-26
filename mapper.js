@@ -13,103 +13,134 @@ var Mapper = Object.extend({
 
 		this.data = {};
 
-		var moscowCenter = new YMaps.GeoPoint(37.64, 55.76);
-		var spbCenter = new YMaps.GeoPoint(30.313622, 59.93772);
-		var kievCenter = new YMaps.GeoPoint(30.522301, 50.451118);
-
 		// http://api.yandex.ru/maps/jsapi/doc/ref/reference/styles.xml
 		[
-			{ name: "Москва 2007",
-			  style: "default#orangeSmallPoint",
-			  fileName: "msk2007-all.json",
-			  center: moscowCenter
-			},
-			{ name: "Москва 2008",
-			  style: "default#yellowSmallPoint",
-			  fileName: "msk2008-all.json",
-			  center: moscowCenter
-			},
-			{ name: "Москва 2010",
-			  style: "default#pinkSmallPoint",
-			  fileName: "msk2010-all.json",
-			  center: moscowCenter
-			},
-			{ name: "Москва 2011",
-			  style: "default#darkblueSmallPoint",
-			  fileName: "msk2011-all.json",
-			  center: moscowCenter
-			},
-
-			{ name: "Санкт-Петербург 2000",
-			  style: "default#nightSmallPoint",
-			  fileName: "spb2000-all.json",
-			  center: spbCenter
-			},
-			{ name: "Санкт-Петербург 2001",
-			  style: "default#whiteSmallPoint",
-			  fileName: "spb2001-all.json",
-			  center: spbCenter
-			},
-			{ name: "Санкт-Петербург 2002",
-			  style: "default#greenSmallPoint",
-			  fileName: "spb2002-all.json",
-			  center: spbCenter
-			},
-			{ name: "Санкт-Петербург 2003",
-			  style: "default#redSmallPoint",
-			  fileName: "spb2003-all.json",
-			  center: spbCenter
-			},
-			{ name: "Санкт-Петербург 2004",
-			  style: "default#yellowSmallPoint",
-			  fileName: "spb2004-all.json",
-			  center: spbCenter
-			},
-			{ name: "Санкт-Петербург 2007",
-			  style: "default#greySmallPoint",
-			  fileName: "spb2007-all.json",
-			  center: spbCenter
-			},
-			{ name: "Санкт-Петербург 2008",
-			  style: "default#orangeSmallPoint",
-			  fileName: "spb2008-all.json",
-			  center: spbCenter
-			},
-			{ name: "Санкт-Петербург 2009",
-			  style: "default#pinkSmallPoint",
-			  fileName: "spb2009-all.json",
-			  center: spbCenter
-			},
-			{ name: "Санкт-Петербург 2010",
-			  style: "default#darkblueSmallPoint",
-			  fileName: "spb2010-all.json",
-			  center: spbCenter
+			{ name: "Москва",
+			  center: new YMaps.GeoPoint(37.64, 55.76),
+			  layers: [
+			    { name: "2007",
+			      style: "default#orangeSmallPoint",
+			      fileName: "msk2007-all.json"
+			    },
+			    { name: "2008",
+			      style: "default#yellowSmallPoint",
+			      fileName: "msk2008-all.json"
+			    },
+			    { name: "2010",
+			      style: "default#pinkSmallPoint",
+			      fileName: "msk2010-all.json"
+			    },
+			    { name: "2011",
+			      style: "default#darkblueSmallPoint",
+			      fileName: "msk2011-all.json"
+			    }
+			  ]
 			},
 
-			{ name: "Киев 2010",
-			  style: "default#pinkSmallPoint",
-			  fileName: "kiev2010-all.json",
-			  center: kievCenter
+			{ name: "Санкт-Петербург",
+			  center: new YMaps.GeoPoint(30.313622, 59.93772),
+			  layers: [
+			    { name: "2000",
+			      style: "default#nightSmallPoint",
+			      fileName: "spb2000-all.json"
+			    },
+			    { name: "2001",
+			      style: "default#whiteSmallPoint",
+			      fileName: "spb2001-all.json"
+			    },
+			    { name: "2002",
+			      style: "default#greenSmallPoint",
+			      fileName: "spb2002-all.json"
+			    },
+			    { name: "2003",
+			      style: "default#redSmallPoint",
+			      fileName: "spb2003-all.json"
+			    },
+			    { name: "2004",
+			      style: "default#yellowSmallPoint",
+			      fileName: "spb2004-all.json"
+			    },
+			    { name: "2007",
+			      style: "default#greySmallPoint",
+			      fileName: "spb2007-all.json"
+			    },
+			    { name: "2008",
+			      style: "default#orangeSmallPoint",
+			      fileName: "spb2008-all.json"
+			    },
+			    { name: "2009",
+			      style: "default#pinkSmallPoint",
+			      fileName: "spb2009-all.json"
+			    },
+			    { name: "2010",
+			      style: "default#darkblueSmallPoint",
+			      fileName: "spb2010-all.json"
+			    }
+			  ]
 			},
-			{ name: "Киев 2011",
-			  style: "default#darkblueSmallPoint",
-			  fileName: "kiev2011-all.json",
-			  center: kievCenter
+
+			{ name: "Киев",
+			  center: new YMaps.GeoPoint(30.522301, 50.451118),
+			  layers: [
+			    { name: "2010",
+			      style: "default#pinkSmallPoint",
+			      fileName: "kiev2010-all.json"
+			    },
+			    { name: "2011",
+			      style: "default#darkblueSmallPoint",
+			      fileName: "kiev2011-all.json"
+			    }
+			  ]
 			}
-		].forEach((function(data) {
-			this.loadData(data);
+		].forEach((function(city) {
+			this.data[city.name] = new MapCity(this, city);
 		}).bind(this));
 	},
 
-	loadData: function(data) {
-		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "data/" + data.fileName, true);
-		xhr.onreadystatechange = (function(data) {
-			if ((xhr.readyState != 4) || (xhr.status != 200))
-				return;
+	createListCheckboxItem: function(name) {
+		this.checkboxUniqueId = this.checkboxUniqueId || 0;
+		this.checkboxUniqueId += 1;
+		var id = 'check_' + this.checkboxUniqueId;
 
-			this.data[data.name] = new MapLayer(this, data, xhr.responseText);
-		}).bind(this, data)
-		xhr.send();
+		var li = document.createElement('li');
+		var label = document.createElement('label');
+		var checkbox = document.createElement('input');
+		var anchor = document.createElement('a');
+
+		li.appendChild(label);
+		label.textContent = name;
+		label.prependChild(checkbox);
+		label.appendChild(anchor);
+
+		label.onmouseover = function() { this.className += " hover"; };
+		label.onmouseout = function() { this.className = this.className.replace(" hover", ""); };
+
+		checkbox.setAttribute('type', 'checkbox');
+		checkbox.setAttribute('id', id);
+
+		return {
+			li: li,
+			label: label,
+			checkbox: checkbox,
+			anchor: anchor
+		};
+	},
+
+	hashKeys: function(obj) {
+		var keys = [];
+		for(var key in obj) {
+			keys.push(key);
+		}
+		return keys;
+	},
+
+	randomString: function(len) {
+		var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+		var result = '';
+		for (var i = 0; i < len; i++) {
+			var rnum = Math.floor(Math.random() * chars.length);
+			result += chars.substring(rnum,rnum+1);
+		}
+		return result;
 	}
 });
