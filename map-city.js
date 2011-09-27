@@ -10,6 +10,14 @@ var MapCity = Object.extend({
 		data.layers.forEach((function(layerData) {
 			this.loadLayerData(layerData);
 		}).bind(this));
+
+		if (this.application.checkedState[this.checkedStateKey()] != null) {
+			this.checkbox.checked = this.application.checkedState[this.checkedStateKey()];
+		}
+	},
+
+	checkedStateKey: function() {
+		return this.name;
 	},
 
 	initListItem: function() {
@@ -36,18 +44,20 @@ var MapCity = Object.extend({
 			if ((xhr.readyState != 4) || (xhr.status != 200))
 				return;
 
-			this.layers[layerData.fileName] = new MapLayer(application, this, layerData, xhr.responseText);
+			this.layers[layerData.fileName] = new MapLayer(this.application, this, layerData, xhr.responseText);
 		}).bind(this, layerData);
 		xhr.send();
 	},
 
 	centerMap: function() {
-		application.map.setCenter(this.center, 10);
+		this.application.map.setCenter(this.center, 10);
 	},
 
 	setAllLayersVisible: function(visible) {
 		this.checkbox.checked = visible;
-		application.hashKeys(this.layers).sort().forEach((function(key) {
+		this.application.checkedState[this.checkedStateKey()] = visible;
+
+		this.application.hashKeys(this.layers).sort().forEach((function(key) {
 			this.layers[key].setVisible(visible);
 		}).bind(this));
 	}

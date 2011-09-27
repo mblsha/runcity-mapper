@@ -6,10 +6,18 @@ var MapLayer = Object.extend({
 		this.kpList = JSON.parse(kpDataText);
 		this.visible = false;
 
-		this.addToMapListForm(application.mapListForm);
+		this.initListItem();
+
+		if (this.application.checkedState[this.checkedStateKey()] != null) {
+			this.setVisible(this.application.checkedState[this.checkedStateKey()]);
+		}
 	},
 
-	addToMapListForm: function(mapListForm) {
+	checkedStateKey: function() {
+		return this.city.name + ":" + this.initData.name;
+	},
+
+	initListItem: function() {
 		var result = this.application.createListCheckboxItem(this.initData.name);
 		this.addLayerToCityList(this.initData.name, result.li);
 
@@ -36,6 +44,7 @@ var MapLayer = Object.extend({
 	setVisible: function(visible) {
 		this.visible = visible;
 		this.checkbox.checked = visible;
+		this.application.checkedState[this.checkedStateKey()] = visible;
 
 		for (var i in this.kpList) {
 			var placemark = this.getPlacemark(this.kpList[i]);
@@ -43,9 +52,9 @@ var MapLayer = Object.extend({
 				continue;
 
 			if (visible)
-				application.map.addOverlay(placemark);
+				this.application.map.addOverlay(placemark);
 			else
-				application.map.removeOverlay(placemark);
+				this.application.map.removeOverlay(placemark);
 		}
 	},
 

@@ -11,7 +11,11 @@ var Mapper = Object.extend({
 		// this.map.addControl(new YMaps.MiniMap());
 		this.map.addControl(new YMaps.ScaleLine());
 
+		this.checkedState = {};
 		this.data = {};
+
+		this.restoreSavedState();
+		this.startSaveStateTimer();
 
 		// http://api.yandex.ru/maps/jsapi/doc/ref/reference/styles.xml
 		[
@@ -95,6 +99,40 @@ var Mapper = Object.extend({
 		].forEach((function(city) {
 			this.data[city.name] = new MapCity(this, city);
 		}).bind(this));
+	},
+
+	startSaveStateTimer: function() {
+		if (this.saveStateTimer) {
+			clearTimeout(this.saveStateTimer);
+			this.saveStateTimer = null
+		}
+		this.saveStateTimer = setTimeout("window.application.saveStateTimerTimeout()", 1000);
+	},
+
+	saveStateTimerTimeout: function() {
+		state = {
+			lat: this.map.getCenter().getLat(),
+			lng: this.map.getCenter().getLng(),
+			zoom: this.map.getZoom()
+		};
+
+		localStorage.setItem('map_state', JSON.stringify(state));
+		localStorage.setItem('checked_state', JSON.stringify(this.checkedState));
+
+		this.startSaveStateTimer();
+	},
+
+	restoreSavedState: function() {
+		var state = localStorage.getItem('map_state');
+		if (state == null || state.length == 0)
+			return;
+		state = JSON.parse(state);
+		this.map.setCenter(new YMaps.GeoPoint(state.lng, state.lat), state.zoom);
+
+		var checkedState = localStorage.getItem('checked_state');
+		if (checkedState == null || checkedState.length == 0)
+			return;
+		this.checkedState = JSON.parse(checkedState);
 	},
 
 	createListCheckboxItem: function(name) {
