@@ -11,8 +11,8 @@ var MapCity = Object.extend({
 			this.loadLayerData(layerData);
 		}).bind(this));
 
-		if (this.application.checkedState[this.checkedStateKey()] != null) {
-			this.checkbox.checked = this.application.checkedState[this.checkedStateKey()];
+		if (this.application.getCheckedState(this.checkedStateKey()) != null) {
+			this.checkbox.checked = this.application.getCheckedState(this.checkedStateKey());
 		}
 	},
 
@@ -55,7 +55,7 @@ var MapCity = Object.extend({
 
 	setAllLayersVisible: function(visible) {
 		this.checkbox.checked = visible;
-		this.application.checkedState[this.checkedStateKey()] = visible;
+		this.application.setCheckedState(this.checkedStateKey(), visible);
 
 		this.application.hashKeys(this.layers).sort().forEach((function(key) {
 			this.layers[key].setVisible(visible);

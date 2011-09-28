@@ -117,7 +117,6 @@ var Mapper = Object.extend({
 		};
 
 		localStorage.setItem('map_state', JSON.stringify(state));
-		localStorage.setItem('checked_state', JSON.stringify(this.checkedState));
 
 		this.startSaveStateTimer();
 	},
@@ -133,6 +132,17 @@ var Mapper = Object.extend({
 		if (checkedState == null || checkedState.length == 0)
 			return;
 		this.checkedState = JSON.parse(checkedState);
+	},
+
+	getCheckedState: function(key) {
+		return this.checkedState[key]
+	},
+
+	setCheckedState: function(key, value) {
+		this.checkedState[key] = value;
+		if (!value)
+			delete this.checkedState[key];
+		localStorage.setItem('checked_state', JSON.stringify(this.checkedState));
 	},
 
 	createListCheckboxItem: function(name) {

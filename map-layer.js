@@ -8,8 +8,8 @@ var MapLayer = Object.extend({
 
 		this.initListItem();
 
-		if (this.application.checkedState[this.checkedStateKey()] != null) {
-			this.setVisible(this.application.checkedState[this.checkedStateKey()]);
+		if (this.application.getCheckedState(this.checkedStateKey()) != null) {
+			this.setVisible(this.application.getCheckedState(this.checkedStateKey()));
 		}
 	},
 
@@ -42,9 +42,11 @@ var MapLayer = Object.extend({
 	},
 
 	setVisible: function(visible) {
+		if (this.visible == visible)
+			return;
 		this.visible = visible;
 		this.checkbox.checked = visible;
-		this.application.checkedState[this.checkedStateKey()] = visible;
+		this.application.setCheckedState(this.checkedStateKey(), visible);
 
 		for (var i in this.kpList) {
 			var placemark = this.getPlacemark(this.kpList[i]);
