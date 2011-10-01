@@ -41,6 +41,17 @@ html, body {
 	text-shadow: black 0px 0px 20px;
 }
 
+#KPList {
+	position: fixed;
+	z-index: 100;
+	left: 50%;
+	top: 50%;
+	width: 50%;
+	height: 50%;
+	background-color: white;
+	opacity: 0.9;
+}
+
 /* http://www.c82.net/samples/checklist-basic.html */
 /* Undo some styles from the master stylesheet */
 .checklist li { background: none; padding-left: 0; }

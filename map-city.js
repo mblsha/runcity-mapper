@@ -60,5 +60,16 @@ var MapCity = Object.extend({
 		this.application.hashKeys(this.layers).sort().forEach((function(key) {
 			this.layers[key].setVisible(visible);
 		}).bind(this));
+	},
+
+	getVisibleKP: function(bounds) {
+		var result = {};
+		this.application.hashKeys(this.layers).sort().forEach((function(result, bounds, key) {
+			var layer = this.layers[key];
+			if (layer.visible) {
+				result[layer.name] = layer.getVisibleKP(bounds);
+			}
+		}).bind(this, result, bounds));
+		return result;
 	}
 });

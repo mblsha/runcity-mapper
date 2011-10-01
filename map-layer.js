@@ -2,6 +2,7 @@ var MapLayer = Object.extend({
 	constructor: function(application, city, data, kpDataText) {
 		this.application = application;
 		this.city = city;
+		this.name = data.name;
 		this.initData = data;
 		this.kpList = JSON.parse(kpDataText);
 		this.visible = false;
@@ -14,12 +15,12 @@ var MapLayer = Object.extend({
 	},
 
 	checkedStateKey: function() {
-		return this.city.name + ":" + this.initData.name;
+		return this.city.name + ":" + this.name;
 	},
 
 	initListItem: function() {
-		var result = this.application.createListCheckboxItem(this.initData.name);
-		this.addLayerToCityList(this.initData.name, result.li);
+		var result = this.application.createListCheckboxItem(this.name);
+		this.addLayerToCityList(this.name, result.li);
 
 		this.checkbox = result.checkbox;
 		result.checkbox.onclick = (function() {
@@ -72,8 +73,23 @@ var MapLayer = Object.extend({
 			{ style: this.initData.style }
 		);
 		// kp.placemark.setIconContent(kp.id);
-		kp.placemark.name = kp.id + " " + kp.name + " (" + this.initData.name + ")";
+		kp.placemark.name = kp.id + " " + kp.name + " (" + this.name + ")";
 		kp.placemark.description = kp.description;
 		return kp.placemark;
+	},
+
+	getVisibleKP: function(bounds) {
+		var result = [];
+		for (var i in this.kpList) {
+			var kp = this.kpList[i];
+			var placemark = this.getPlacemark(kp);
+			if (placemark == null)
+				continue;
+
+			if (bounds.contains(placemark.getGeoPoint())) {
+				result.push(kp.id);
+			}
+		}
+		return result;
 	}
 });

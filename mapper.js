@@ -1,6 +1,10 @@
 var Mapper = Object.extend({
 	constructor: function() {
 		this.mapListForm = document.getElementById("MapListForm");
+		this.addVisibleKPToListButton = document.getElementById("AddVisibleKPToListButton");
+		this.addVisibleKPToListButton.onclick = (function() {
+			this.addVisibleKPToList();
+		}).bind(this);
 
 		this.map = new YMaps.Map(document.getElementById("YMapsID"));
 		this.map.setCenter(new YMaps.GeoPoint(37.64, 55.76), 10);
@@ -11,8 +15,12 @@ var Mapper = Object.extend({
 		// this.map.addControl(new YMaps.MiniMap());
 		this.map.addControl(new YMaps.ScaleLine());
 
+		this.initData();
+	},
+
+	initData: function() {
 		this.checkedState = {};
-		this.data = {};
+		this.data = [];
 
 		this.restoreSavedState();
 		this.startSaveStateTimer();
@@ -97,7 +105,7 @@ var Mapper = Object.extend({
 			  ]
 			}
 		].forEach((function(city) {
-			this.data[city.name] = new MapCity(this, city);
+			this.data.push(new MapCity(this, city));
 		}).bind(this));
 	},
 
@@ -144,6 +152,18 @@ var Mapper = Object.extend({
 			delete this.checkedState[key];
 		localStorage.setItem('checked_state', JSON.stringify(this.checkedState));
 	},
+
+	addVisibleKPToList: function() {
+		var visibleKP = [];
+		this.data.forEach((function(visibleKP, city) {
+			visibleKP.push(city.getVisibleKP(this.map.getBounds()));
+		}).bind(this, visibleKP));
+		console.log(JSON.stringify(visibleKP));
+	},
+
+//----------------------------------------------------------------------------
+// Helpers
+//----------------------------------------------------------------------------
 
 	createListCheckboxItem: function(name) {
 		this.checkboxUniqueId = this.checkboxUniqueId || 0;
