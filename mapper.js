@@ -1,9 +1,9 @@
 var Mapper = Object.extend({
 	constructor: function() {
 		this.mapListForm = document.getElementById("MapListForm");
-		this.addVisibleKPToListButton = document.getElementById("AddVisibleKPToListButton");
-		this.addVisibleKPToListButton.onclick = (function() {
-			this.addVisibleKPToList();
+		this.addButton = document.getElementById("AddButton");
+		this.addButton.onclick = (function() {
+			this.addButtonClicked();
 		}).bind(this);
 
 		this.map = new YMaps.Map(document.getElementById("YMapsID"));
@@ -21,6 +21,7 @@ var Mapper = Object.extend({
 	initData: function() {
 		this.checkedState = {};
 		this.data = [];
+		this.visibleKP = {};
 
 		this.restoreSavedState();
 		this.startSaveStateTimer();
@@ -153,12 +154,56 @@ var Mapper = Object.extend({
 		localStorage.setItem('checked_state', JSON.stringify(this.checkedState));
 	},
 
-	addVisibleKPToList: function() {
-		var visibleKP = [];
-		this.data.forEach((function(visibleKP, city) {
-			visibleKP.push(city.getVisibleKP(this.map.getBounds()));
-		}).bind(this, visibleKP));
-		console.log(JSON.stringify(visibleKP));
+	addButtonClicked: function() {
+		var result = [];
+		this.data.forEach((function(result, city) {
+			result.push(city.getVisibleKP(this.map.getBounds()));
+		}).bind(this, result));
+
+		// FIXME: could this be done easier?
+		result.forEach((function(city) {
+			city.forEach((function(layer) {
+				layer.forEach((function(kp) {
+					this.visibleKP[kp.fullId()] = kp;
+				}).bind(this));
+			}).bind(this));
+		}).bind(this));
+
+		this.showUniqueIdsForVisibleKP();
+		this.updateVisibleKPList();
+	},
+
+	showUniqueIdsForVisibleKP: function() {
+		this.visibleKPnonUniqueIds = {};
+		var idHash = {};
+
+		this.hashKeys(this.visibleKP).sort().forEach((function(idHash, key) {
+			var kp = this.visibleKP[key];
+			if (!idHash[kp.rawData.id]) {
+				idHash[kp.rawData.id] = [];
+			}
+			idHash[kp.rawData.id].push(kp);
+		}).bind(this, idHash));
+
+		this.hashKeys(idHash).sort().forEach((function(idHash, key) {
+			var array = idHash[key]
+			if (array.length > 1) {
+				for (var i = 0; i < array.length; ++i) {
+					this.visibleKPnonUniqueIds[array[i].fullId()] = true;
+				}
+			}
+		}).bind(this, idHash));
+
+		this.hashKeys(this.visibleKP).sort().forEach((function(key) {
+			var kp = this.visibleKP[key];
+			kp.setIdOnPlacemarkVisible(true, {
+				showLayerName: this.visibleKPnonUniqueIds[kp.fullId()] != null
+			});
+		}).bind(this));
+	},
+
+	updateVisibleKPList: function() {
+		// FIXME
 	},
 
 //----------------------------------------------------------------------------

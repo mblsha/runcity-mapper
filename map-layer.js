@@ -3,9 +3,15 @@ var MapLayer = Object.extend({
 		this.application = application;
 		this.city = city;
 		this.name = data.name;
+		this.style = data.style;
 		this.initData = data;
-		this.kpList = JSON.parse(kpDataText);
 		this.visible = false;
+
+		this.kpList = [];
+		var rawKpList = JSON.parse(kpDataText);
+		for (var i in rawKpList) {
+			this.kpList.push(new MapKP(this, rawKpList[i]));
+		}
 
 		this.initListItem();
 
@@ -49,47 +55,19 @@ var MapLayer = Object.extend({
 		this.checkbox.checked = visible;
 		this.application.setCheckedState(this.checkedStateKey(), visible);
 
-		for (var i in this.kpList) {
-			var placemark = this.getPlacemark(this.kpList[i]);
-			if (placemark == null)
-				continue;
-
-			if (visible)
-				this.application.map.addOverlay(placemark);
-			else
-				this.application.map.removeOverlay(placemark);
-		}
-	},
-
-	getPlacemark: function(kp) {
-		if (kp.placemark)
-			return kp.placemark;
-
-		if (!kp.lat || !kp.lon)
-			return null;
-
-		kp.placemark = new YMaps.Placemark(
-			new YMaps.GeoPoint(kp.lon, kp.lat),
-			{ style: this.initData.style }
-		);
-		// kp.placemark.setIconContent(kp.id);
-		kp.placemark.name = kp.id + " " + kp.name + " (" + this.name + ")";
-		kp.placemark.description = kp.description;
-		return kp.placemark;
+		this.kpList.forEach((function(map, visible, kp) {
+			kp.setVisible(map, visible);
+		}).bind(this, this.application.map, visible))
 	},
 
 	getVisibleKP: function(bounds) {
 		var result = [];
-		for (var i in this.kpList) {
-			var kp = this.kpList[i];
-			var placemark = this.getPlacemark(kp);
-			if (placemark == null)
-				continue;
-
-			if (bounds.contains(placemark.getGeoPoint())) {
-				result.push(kp.id);
+		this.kpList.forEach((function(result, bounds, kp) {
+			var placemark = kp.getPlacemark();
+			if (placemark && bounds.contains(placemark.getGeoPoint())) {
+				result.push(kp);
 			}
-		}
+		}).bind(this, result, bounds))
 		return result;
 	}
 });
