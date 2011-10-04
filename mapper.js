@@ -228,9 +228,11 @@ var Mapper = Object.extend({
 			var showLayerName = this.visibleKPnonUniqueIds[kp.fullId()] != null;
 			createSpan('id', kp.displayId(showLayerName), li);
 			createSpan('name', kp.rawData.name, li);
+			// createSpan("image", kp.rawData.image, li);
 			createSpan('description', kp.rawData.description, li);
 			createSpan('quest', kp.rawData.quest, li);
 			createSpan('answer', kp.rawData.answer, li);
+			createSpan('longanswer', kp.rawData.longanswer, li);
 
 			this.kpList.appendChild(li);
 		}).bind(this, createSpan));
@@ -238,7 +240,7 @@ var Mapper = Object.extend({
 
 	clearKPList: function() {
 		while (this.kpList.children.length) {
-			this.kpList.children.removeChild(this.kpList.children[0]);
+			this.kpList.removeChild(this.kpList.children[0]);
 		}
 	},
 
@@ -253,11 +255,10 @@ var Mapper = Object.extend({
 			intHash[intHashKey].push(key);
 		}).bind(this, intHash));
 
-		var sortedKeys = this.hashKeys(intHash).sort();
-
 		var result = [];
-		for (var i = 0; i < sortedKeys.length; ++i) {
-			result = result.concat(intHash[sortedKeys[i]]);
+		// intHash is sorted by default
+		for (var key in intHash) {
+			result = result.concat(intHash[key]);
 		}
 		return result;
 	},

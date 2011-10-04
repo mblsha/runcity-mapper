@@ -97,7 +97,8 @@ html, body {
   font-style: italic;
 }
 
-#KPList li .answer {
+#KPList li .answer,
+#KPList li .longanswer {
   display: block;
   font-size: 10pt;
   color: #333;
