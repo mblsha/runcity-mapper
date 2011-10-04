@@ -1,6 +1,7 @@
 var Mapper = Object.extend({
 	constructor: function() {
 		this.mapListForm = document.getElementById("MapListForm");
+		this.kpList = document.getElementById("KPList");
 		this.addButton = document.getElementById("AddButton");
 		this.addButton.onclick = (function() {
 			this.addButtonClicked();
@@ -126,6 +127,7 @@ var Mapper = Object.extend({
 		};
 
 		localStorage.setItem('map_state', JSON.stringify(state));
+		// FIXME: save this.visibleKP?
 
 		this.startSaveStateTimer();
 	},
@@ -169,11 +171,12 @@ var Mapper = Object.extend({
 			}).bind(this));
 		}).bind(this));
 
+		this.updateVisibleKPnonUniqueIds();
 		this.showUniqueIdsForVisibleKP();
-		this.updateVisibleKPList();
+		this.updateKPList();
 	},
 
-	showUniqueIdsForVisibleKP: function() {
+	updateVisibleKPnonUniqueIds: function() {
 		this.visibleKPnonUniqueIds = {};
 		var idHash = {};
 
@@ -193,7 +196,9 @@ var Mapper = Object.extend({
 				}
 			}
 		}).bind(this, idHash));
+	},
 
+	showUniqueIdsForVisibleKP: function() {
 		this.hashKeys(this.visibleKP).sort().forEach((function(key) {
 			var kp = this.visibleKP[key];
 			kp.setIdOnPlacemarkVisible(true, {
@@ -202,8 +207,59 @@ var Mapper = Object.extend({
 		}).bind(this));
 	},
 
-	updateVisibleKPList: function() {
-		// FIXME
+	updateKPList: function() {
+		this.clearKPList();
+
+		createSpan = function(klass, text, li) {
+			if (!text || text.length == 0)
+				return;
+
+			var span = document.createElement('span');
+			li.appendChild(span);
+
+			span.setAttribute('class', klass);
+			span.textContent = text;
+		};
+
+		this.sortedVisibleKPkeys().forEach((function(createSpan, key) {
+			var kp = this.visibleKP[key];
+
+			var li = document.createElement('li');
+			var showLayerName = this.visibleKPnonUniqueIds[kp.fullId()] != null;
+			createSpan('id', kp.displayId(showLayerName), li);
+			createSpan('name', kp.rawData.name, li);
+			createSpan('description', kp.rawData.description, li);
+			createSpan('quest', kp.rawData.quest, li);
+			createSpan('answer', kp.rawData.answer, li);
+
+			this.kpList.appendChild(li);
+		}).bind(this, createSpan));
+	},
+
+	clearKPList: function() {
+		while (this.kpList.children.length) {
+			this.kpList.children.removeChild(this.kpList.children[0]);
+		}
+	},
+
+	sortedVisibleKPkeys: function() {
+		var intHash = {};
+		this.hashKeys(this.visibleKP).sort().forEach((function(intHash, key) {
+			var kp = this.visibleKP[key];
+
+			var intHashKey = parseInt(kp.rawData.id);
+			if (!intHash[intHashKey])
+				intHash[intHashKey] = [];
+			intHash[intHashKey].push(key);
+		}).bind(this, intHash));
+
+		var sortedKeys = this.hashKeys(intHash).sort();
+
+		var result = [];
+		for (var i = 0; i < sortedKeys.length; ++i) {
+			result = result.concat(intHash[sortedKeys[i]]);
+		}
+		return result;
 	},
 
 //----------------------------------------------------------------------------

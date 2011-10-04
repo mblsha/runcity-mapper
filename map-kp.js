@@ -27,7 +27,7 @@ var MapKP = Object.extend({
 			{ style: this.layer.style }
 		);
 		// this.placemark.setIconContent(this.rawData.id);
-		this.placemark.name = this.rawData.id + " " + this.rawData.name + " (" + this.rawData.name + ")";
+		this.placemark.name = this.rawData.id + " " + this.rawData.name + " (" + this.layer.name + ")";
 		this.placemark.description = this.rawData.description;
 		return this.placemark;
 	},
@@ -35,10 +35,7 @@ var MapKP = Object.extend({
 	setIdOnPlacemarkVisible: function(visible, data) {
 		var text = null;
 		if (visible) {
-			if (data && data.showLayerName)
-				text = this.shortId();
-			else
-				text = this.rawData.id;
+			text = this.displayId(data.showLayerName);
 		}
 
 		if (this.placemark) {
@@ -52,5 +49,11 @@ var MapKP = Object.extend({
 
 	shortId: function() {
 		return this.rawData.id + ":" + this.layer.name;
+	},
+
+	displayId: function(showLayerName) {
+		if (showLayerName)
+			return this.shortId();
+		return this.rawData.id;
 	}
 });
