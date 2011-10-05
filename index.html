@@ -27,23 +27,25 @@
 			var application = new Mapper();
 			window.application = application;
 
-			document.getElementById("ControlPanel").onmouseover = function() {
-				document.getElementById("ControlPanelArrow").setAttribute('style', 'display: none;');
-			};
+			function mouseWatcher() {
+				document.documentElement.removeEventListener("mousedown", mouseWatcher);
+				setTimeout(function() {
+					document.getElementById("ControlPanel").classList.remove('initial_panel');
+					document.getElementById("KPPanel").classList.remove('initial_panel');
+				}, 250);
+			}
+			document.documentElement.addEventListener("mousedown", mouseWatcher, true);
 		}, false);
 	</script>
 </head>
 <body>
 	<div id="YMapsID"></div>
-	<div id="ControlPanel">
-		<form>
-			<ul id="MapListForm" class="checklist">
-			</ul>
-			<input type="button" value="Добавить видимые точки в список" id="AddButton" />
-		</form>
+	<div id="ControlPanel" class="initial_panel">
+		<ul id="MapListForm" class="checklist">
+		</ul>
+		<input type="button" value="Добавить видимые точки в список" id="AddButton" />
 	</div>
-	<div id="ControlPanelArrow">←</div>
-	<div id="KPPanel">
+	<div id="KPPanel" class="initial_panel">
 		<ul id="KPList">
 		</ul>
 	</div>
