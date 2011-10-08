@@ -4,7 +4,7 @@ html, body {
 	padding: 0;
 	margin: 0;
 
-  font-family: Helvetica;
+	font-family: Helvetica;
 }
 
 #YMapsID {
@@ -92,65 +92,6 @@ html, body {
 
 	margin: 0;
 	padding: 0;
-}
-
-#KPList li {
-	padding: 0;
-
-	margin-left: 5px;
-	margin-right: 5px;
-	margin-top: 0px;
-	margin-bottom: 0px;
-}
-
-#KPList li {
-  display: block;
-/*  padding: 0 0.2em 0 25px;
-  text-indent: -25px;*/
-}
-
-#KPList li .id {
-  font-weight: bold;
-  padding-right: 0.3em;
-  font-size: 11pt;
-}
-
-#KPList li .name {
-  font-size: 11pt;
-}
-
-#KPList li .description {
-  display: block;
-  font-size: 10pt;
-  color: #333;
-  padding-left: 15px;
-}
-
-#KPList li .quest {
-  display: block;
-  font-size: 8pt;
-  color: #333;
-  padding-left: 15px;
-  font-style: italic;
-}
-
-#KPList li .answer {
-  display: block;
-  font-size: 10pt;
-  color: #333;
-
-  -moz-transform: scaleX(-1); /* Gecko */
-  -o-transform: scaleX(-1); /* Operah */
-  -webkit-transform: scaleX(-1); /* webkit */
-  transform: scaleX(-1); /* standard */
-  filter: FlipH; /* IE 6/7/8 */
-}
-
-#KPList li .longanswer {
-  display: block;
-  font-size: 7pt;
-  color: #333;
-  padding-left: 15px;
 }
 
 /* http://www.c82.net/samples/checklist-basic.html */
