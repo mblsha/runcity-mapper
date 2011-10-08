@@ -7,6 +7,11 @@ var Mapper = Object.extend({
 			this.addButtonClicked();
 		}).bind(this);
 
+		this.clearButton = document.getElementById("ClearButton");
+		this.clearButton.onclick = (function() {
+			this.clearButtonClicked();
+		}).bind(this);
+
 		this.map = new YMaps.Map(document.getElementById("YMapsID"));
 		this.map.setCenter(new YMaps.GeoPoint(37.64, 55.76), 10);
 
@@ -179,9 +184,15 @@ var Mapper = Object.extend({
 		this.visibleKPChanged();
 	},
 
+	clearButtonClicked: function() {
+		this.showUniqueIdsForVisibleKP(false);
+		this.visibleKP = {};
+		this.visibleKPChanged();
+	},
+
 	visibleKPChanged: function() {
 		this.updateVisibleKPnonUniqueIds();
-		this.showUniqueIdsForVisibleKP();
+		this.showUniqueIdsForVisibleKP(true);
 		this.updateKPList();
 	},
 
@@ -207,14 +218,14 @@ var Mapper = Object.extend({
 		}).bind(this, idHash));
 	},
 
-	showUniqueIdsForVisibleKP: function() {
+	showUniqueIdsForVisibleKP: function(visible) {
 		this.initialVisibleKP = {};
 		this.hashKeys(this.visibleKP).sort().forEach((function(key) {
 			var kp = this.visibleKP[key];
 			var data = {
 				showLayerName: this.visibleKPnonUniqueIds[kp.fullId()] != null
 			};
-			kp.setIdOnPlacemarkVisible(true, data);
+			kp.setIdOnPlacemarkVisible(visible, data);
 
 			this.initialVisibleKP[key] = data;
 		}).bind(this));

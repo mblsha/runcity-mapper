@@ -55,7 +55,7 @@ html, body {
 	bottom: 0px;
 }
 
-#AddButton {
+#AddButton, #ClearButton {
 	position: absolute;
 	width: 250px;
 	left: 50%;
@@ -80,6 +80,10 @@ html, body {
 }
 
 #KPList {
+	position: absolute;
+	top: 30px;
+	bottom: 0px;
+
 	border: 1px solid #ccc;
 	list-style: none;
 	height: 100%;
