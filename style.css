@@ -51,15 +51,15 @@ html, body {
 
 #MapListForm {
 	position: absolute;
-	top: 0;
-	bottom: 30px;
+	top: 30px;
+	bottom: 0px;
 }
 
 #AddButton {
 	position: absolute;
 	width: 250px;
 	left: 50%;
-	bottom: 5px;
+	top: 5px;
 	margin-left: -125px;
 }
 
@@ -85,10 +85,18 @@ html, body {
 	height: 100%;
 	overflow: auto;
 	width: 100%;
+
+	margin: 0;
+	padding: 0;
 }
 
-#KPList, #KPList li {
-  margin: 0; padding: 0;
+#KPList li {
+	padding: 0;
+
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 0px;
+	margin-bottom: 0px;
 }
 
 #KPList li {

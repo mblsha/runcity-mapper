@@ -9,10 +9,15 @@ var MapKP = Object.extend({
 		if (placemark == null)
 			return;
 
-		if (visible)
+		if (visible) {
 			map.addOverlay(placemark);
-		else
+			if (this.layer.application.initialKpData(this)) {
+				this.layer.application.addKpWithData(this);
+			}
+		}
+		else {
 			map.removeOverlay(placemark);
+		}
 	},
 
 	getPlacemark: function() {

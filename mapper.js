@@ -114,7 +114,7 @@ var Mapper = Object.extend({
 	startSaveStateTimer: function() {
 		if (this.saveStateTimer) {
 			clearTimeout(this.saveStateTimer);
-			this.saveStateTimer = null
+			this.saveStateTimer = null;
 		}
 		this.saveStateTimer = setTimeout("window.application.saveStateTimerTimeout()", 1000);
 	},
@@ -127,7 +127,7 @@ var Mapper = Object.extend({
 		};
 
 		localStorage.setItem('map_state', JSON.stringify(state));
-		// FIXME: save this.visibleKP?
+		localStorage.setItem('visible_kp', JSON.stringify(this.initialVisibleKP));
 
 		this.startSaveStateTimer();
 	},
@@ -143,6 +143,11 @@ var Mapper = Object.extend({
 		if (checkedState == null || checkedState.length == 0)
 			return;
 		this.checkedState = JSON.parse(checkedState);
+
+		var initialVisibleKPState = localStorage.getItem('visible_kp');
+		if (initialVisibleKPState == null || initialVisibleKPState.length == 0)
+			return;
+		this.initialVisibleKP = JSON.parse(initialVisibleKPState);
 	},
 
 	getCheckedState: function(key) {
@@ -171,6 +176,10 @@ var Mapper = Object.extend({
 			}).bind(this));
 		}).bind(this));
 
+		this.visibleKPChanged();
+	},
+
+	visibleKPChanged: function() {
 		this.updateVisibleKPnonUniqueIds();
 		this.showUniqueIdsForVisibleKP();
 		this.updateKPList();
@@ -199,11 +208,15 @@ var Mapper = Object.extend({
 	},
 
 	showUniqueIdsForVisibleKP: function() {
+		this.initialVisibleKP = {};
 		this.hashKeys(this.visibleKP).sort().forEach((function(key) {
 			var kp = this.visibleKP[key];
-			kp.setIdOnPlacemarkVisible(true, {
+			var data = {
 				showLayerName: this.visibleKPnonUniqueIds[kp.fullId()] != null
-			});
+			};
+			kp.setIdOnPlacemarkVisible(true, data);
+
+			this.initialVisibleKP[key] = data;
 		}).bind(this));
 	},
 
@@ -261,6 +274,24 @@ var Mapper = Object.extend({
 			result = result.concat(intHash[key]);
 		}
 		return result;
+	},
+
+	initialKpData: function(kp) {
+		return this.initialVisibleKP[kp.fullId()];
+	},
+
+	addKpWithData: function(kp) {
+		kp.setIdOnPlacemarkVisible(true, this.initialKpData(kp));
+		this.visibleKP[kp.fullId()] = kp;
+
+		if (this.addKpWithDataTimer) {
+			clearTimeout(this.addKpWithDataTimer);
+			this.addKpWithDataTimer = null;
+		}
+
+		this.addKpWithDataTimer = setTimeout((function() {
+			this.visibleKPChanged();
+		}).bind(this), 500);
 	},
 
 //----------------------------------------------------------------------------
