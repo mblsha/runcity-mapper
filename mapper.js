@@ -149,8 +149,9 @@ var Mapper = Object.extend({
 			return;
 		this.checkedState = JSON.parse(checkedState);
 
+		this.clearButtonClicked();
 		var initialVisibleKPState = localStorage.getItem('visible_kp');
-		if (initialVisibleKPState == null || initialVisibleKPState.length == 0)
+		if (initialVisibleKPState == null || initialVisibleKPState == "undefined" || initialVisibleKPState.length == 0)
 			return;
 		this.initialVisibleKP = JSON.parse(initialVisibleKPState);
 	},

@@ -40,11 +40,12 @@ var MapCity = Object.extend({
 	loadLayerData: function(layerData) {
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", "data/" + layerData.fileName, true);
-		xhr.onreadystatechange = (function(layerData) {
-			if ((xhr.readyState != 4) || (xhr.status != 200))
-				return;
-
-			this.layers[layerData.fileName] = new MapLayer(this.application, this, layerData, xhr.responseText);
+		xhr.onload = (function(layerData) {
+			if ((xhr.readyState == 4) && (xhr.status < 400)) {
+				this.layers[layerData.fileName] = new MapLayer(this.application, this, layerData, xhr.responseText);
+			} else {
+				console.error('loadLayerData: FAILED ' + xhr.status + ' for ' + layerData.fileName)
+			}
 		}).bind(this, layerData);
 		xhr.send();
 	},
